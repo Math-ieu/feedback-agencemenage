@@ -247,17 +247,6 @@ function Index() {
                       </div>
                     </div>
 
-                    <div className="flex items-start gap-3 rounded-md border border-input bg-muted/30 p-3">
-                      <Checkbox
-                        id="opt-out"
-                        checked={optOut}
-                        onCheckedChange={(v) => setOptOut(v === true)}
-                        className="mt-0.5"
-                      />
-                      <Label htmlFor="opt-out" className="text-sm font-normal leading-relaxed">
-                        Je ne souhaite plus recevoir ce type de message.
-                      </Label>
-                    </div>
                   </section>
                 )}
 
