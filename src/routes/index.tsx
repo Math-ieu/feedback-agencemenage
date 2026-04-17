@@ -30,10 +30,11 @@ export const Route = createFileRoute("/")({
 });
 
 const SATISFACTION_OPTIONS = [
-  { value: "tres-satisfait", label: "Très satisfait", emoji: "😍" },
-  { value: "satisfait", label: "Satisfait", emoji: "🙂" },
-  { value: "moyen", label: "Moyen", emoji: "😐" },
-  { value: "insatisfait", label: "Insatisfait", emoji: "😞" },
+  { value: "tres-satisfaite", label: "Très satisfaite", emoji: "😍", stars: 5 },
+  { value: "satisfaite", label: "Satisfaite", emoji: "🙂", stars: 4 },
+  { value: "moyennement-satisfaite", label: "Moyennement satisfaite", emoji: "😐", stars: 3 },
+  { value: "insatisfaite", label: "Insatisfaite", emoji: "🙁", stars: 2 },
+  { value: "tres-insatisfaite", label: "Très insatisfaite", emoji: "😞", stars: 1 },
 ];
 
 function Index() {
@@ -138,17 +139,44 @@ function Index() {
                   />
                 </section>
 
-                {/* Note du candidat */}
-                <section className="space-y-2">
-                  <Label className="text-base font-semibold">Note du candidat</Label>
+                {/* Note du profil */}
+                <section className="space-y-3">
+                  <Label className="text-base font-semibold">Note du profil</Label>
                   <p className="text-sm text-muted-foreground">
                     Évaluez l'intervenant qui a réalisé la prestation.
                   </p>
-                  <StarRating
-                    value={candidateRating}
-                    onChange={setCandidateRating}
-                    label="Note du candidat"
-                  />
+                  <RadioGroup
+                    value={satisfaction}
+                    onValueChange={(v) => {
+                      setSatisfaction(v);
+                      const opt = SATISFACTION_OPTIONS.find((o) => o.value === v);
+                      if (opt) setCandidateRating(opt.stars);
+                    }}
+                    className="grid grid-cols-1 gap-2"
+                  >
+                    {SATISFACTION_OPTIONS.map((opt) => (
+                      <Label
+                        key={opt.value}
+                        htmlFor={`profil-${opt.value}`}
+                        className="flex cursor-pointer items-center gap-3 rounded-lg border border-input bg-background p-3 transition-colors hover:bg-accent has-[:checked]:border-primary has-[:checked]:bg-accent"
+                      >
+                        <RadioGroupItem id={`profil-${opt.value}`} value={opt.value} />
+                        <span className="text-2xl" aria-hidden>
+                          {opt.emoji}
+                        </span>
+                        <span className="flex-1 text-sm font-medium">{opt.label}</span>
+                        <span
+                          className="text-sm tracking-wider text-primary"
+                          aria-label={`${opt.stars} étoile${opt.stars > 1 ? "s" : ""}`}
+                        >
+                          {"★".repeat(opt.stars)}
+                          <span className="text-muted-foreground">
+                            {"★".repeat(5 - opt.stars)}
+                          </span>
+                        </span>
+                      </Label>
+                    ))}
+                  </RadioGroup>
                 </section>
 
                 {/* Opt-out */}
