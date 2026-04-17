@@ -30,10 +30,11 @@ export const Route = createFileRoute("/")({
 });
 
 const SATISFACTION_OPTIONS = [
-  { value: "tres-satisfait", label: "Très satisfait", emoji: "😍" },
-  { value: "satisfait", label: "Satisfait", emoji: "🙂" },
-  { value: "moyen", label: "Moyen", emoji: "😐" },
-  { value: "insatisfait", label: "Insatisfait", emoji: "😞" },
+  { value: "tres-satisfaite", label: "Très satisfaite", emoji: "😍", stars: 5 },
+  { value: "satisfaite", label: "Satisfaite", emoji: "🙂", stars: 4 },
+  { value: "moyennement-satisfaite", label: "Moyennement satisfaite", emoji: "😐", stars: 3 },
+  { value: "insatisfaite", label: "Insatisfaite", emoji: "🙁", stars: 2 },
+  { value: "tres-insatisfaite", label: "Très insatisfaite", emoji: "😞", stars: 1 },
 ];
 
 function Index() {
