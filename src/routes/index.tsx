@@ -275,6 +275,20 @@ function Index() {
           </CardContent>
         </Card>
 
+        {!submitted && (
+          <div className="mx-auto mt-4 flex max-w-2xl items-start gap-3 rounded-md border border-input bg-muted/30 p-3">
+            <Checkbox
+              id="opt-out"
+              checked={optOut}
+              onCheckedChange={(v) => setOptOut(v === true)}
+              className="mt-0.5"
+            />
+            <Label htmlFor="opt-out" className="text-sm font-normal leading-relaxed">
+              Je ne souhaite plus recevoir ce type de message.
+            </Label>
+          </div>
+        )}
+
         <p className="mt-6 text-center text-xs text-muted-foreground">
           © {new Date().getFullYear()} Agence Ménage — Merci pour votre confiance.
         </p>
