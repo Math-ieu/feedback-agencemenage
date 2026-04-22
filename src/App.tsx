@@ -95,8 +95,8 @@ export default function App() {
                     <span className="text-primary">{STEPS[step - 1].title}</span>
                   </div>
                   <Progress value={progress} className="h-1.5 transition-all duration-500" />
-                </div>
-
+                </div>  
+     
                 {/* Step 1 — Note du profil */}
                 {step === 1 && (
                   <section className="space-y-4 animate-in slide-in-from-right-4 duration-500">
