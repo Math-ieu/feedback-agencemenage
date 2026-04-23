@@ -53,9 +53,50 @@ export default function App() {
 
   const handlePrev = () => setStep((s) => Math.max(s - 1, 1));
 
-  const handleSubmit = () => {
-    setSubmitted(true);
-    toast.success("Merci ! Votre avis a bien été envoyé.");
+  const handleSubmit = async () => {
+    const profilOption = PROFIL_OPTIONS.find((o) => o.value === profil);
+    const noteIntervenant = profilOption?.stars || 0;
+    
+    // Extract demandeId from URL (e.g., /feedback/123)
+    const urlParts = window.location.pathname.split("/");
+    const demandeIdRaw = urlParts[urlParts.length - 1];
+    const demandeId = parseInt(demandeIdRaw);
+
+    if (isNaN(demandeId)) {
+      toast.error("Identifiant de demande invalide.");
+      return;
+    }
+
+    const payload = {
+      demande: demandeId,
+      note_intervenant: noteIntervenant,
+      note_agence: agencyRating,
+      commentaire: comment,
+      opt_out: optOut,
+      source: "client"
+    };
+
+    const API_BASE_URL = import.meta.env.VITE_API_URL || "https://agencemenage-api.up.railway.app";
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/feedback/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error("Échec de l'envoi du feedback");
+      }
+
+      setSubmitted(true);
+      toast.success("Merci ! Votre avis a bien été envoyé.");
+    } catch (error) {
+      console.error("Error submitting feedback:", error);
+      toast.error("Une erreur est survenue lors de l'envoi. Veuillez réessayer.");
+    }
   };
 
   return (
