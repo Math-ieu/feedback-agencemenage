@@ -10,6 +10,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { Progress } from "@/components/ui/progress";
 import { StarRating } from "@/components/StarRating";
 import { cn } from "@/lib/utils";
+import { decodeId } from "@/lib/obfuscation";
 
 const PROFIL_OPTIONS = [
   { value: "tres-satisfaite", label: "Très satisfaite", emoji: "😍", stars: 5 },
@@ -57,13 +58,13 @@ export default function App() {
     const profilOption = PROFIL_OPTIONS.find((o) => o.value === profil);
     const noteIntervenant = profilOption?.stars || 0;
     
-    // Extract demandeId from URL (e.g., /feedback/123)
+    // Extract and decode demandeId from URL (e.g., /feedback/ENCODED_ID)
     const urlParts = window.location.pathname.split("/");
-    const demandeIdRaw = urlParts[urlParts.length - 1];
-    const demandeId = parseInt(demandeIdRaw);
+    const encodedId = urlParts[urlParts.length - 1];
+    const demandeId = decodeId(encodedId);
 
-    if (isNaN(demandeId)) {
-      toast.error("Identifiant de demande invalide.");
+    if (!demandeId) {
+      toast.error("Lien de feedback invalide ou expiré.");
       return;
     }
 
