@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
-import { ArrowLeft, ArrowRight, Check } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, AlertCircle } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -33,6 +33,23 @@ export default function App() {
   const [comment, setComment] = useState("");
   const [optOut, setOptOut] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [isValidating, setIsValidating] = useState(true);
+  const [invalidLink, setInvalidLink] = useState(false);
+
+  useEffect(() => {
+    const urlParts = window.location.pathname.split("/");
+    const encodedId = urlParts[urlParts.length - 1];
+    
+    if (!encodedId || encodedId === "feedback") {
+      setInvalidLink(true);
+    } else {
+      const demandeId = decodeId(encodedId);
+      if (!demandeId) {
+        setInvalidLink(true);
+      }
+    }
+    setIsValidating(false);
+  }, []);
 
   const progress = (step / STEPS.length) * 100;
   const profilOption = PROFIL_OPTIONS.find((o) => o.value === profil);
@@ -116,7 +133,23 @@ export default function App() {
           </CardHeader>
 
           <CardContent>
-            {submitted ? (
+            {isValidating ? (
+              <div className="py-12 flex justify-center">
+                <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+              </div>
+            ) : invalidLink ? (
+              <div className="py-12 text-center animate-in fade-in zoom-in duration-500">
+                <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-destructive/10 mb-6">
+                  <AlertCircle className="h-10 w-10 text-destructive" />
+                </div>
+                <h2 className="text-2xl font-bold text-foreground">
+                  Lien invalide ou expiré
+                </h2>
+                <p className="mt-3 text-muted-foreground max-w-sm mx-auto">
+                  Désolé, ce lien de feedback n'est plus valide. Si vous avez déjà donné votre avis, nous vous en remercions !
+                </p>
+              </div>
+            ) : submitted ? (
               <div className="py-12 text-center animate-in fade-in zoom-in duration-500">
                 <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-primary/10 mb-6">
                   <Check className="h-10 w-10 text-primary" />
